@@ -8,9 +8,18 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+      backgroundImage: {
+          gradient: "url('/static/background.png')"
+      },
+         colors: {
+        purple: {
+          951: 'rgba(79, 70, 229, 1)',
+        },
+        gray: {
+          950: 'hsla(0, 0%, 100%, 0.7);',
+          951: 'hsla(0, 0%, 100%, 0.4);',
+          952: '#373b64',
+        },
       },
     },
   },
