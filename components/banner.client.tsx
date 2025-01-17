@@ -5,6 +5,8 @@ import React from 'react'
 export default function Banner() {
 
 const handleOnClick = () => {
+  console.log('click me');
+  
 }
    return (
     <div className="mb-12 grid lg:mb-24 lg:grid-cols-2">
