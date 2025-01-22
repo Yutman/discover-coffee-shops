@@ -1,7 +1,5 @@
-import React from 'react'
+import React from 'react';
 
 export default function Page() {
-  return <div>
-      Coffee store page
-    </div>
+  return <div>Coffee store Page</div>;
 }
