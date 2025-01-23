@@ -1,9 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['images.unsplash.com'], // Allow Unsplash images
+    domains: ['images.unsplash.com'], // Allow Unsplash's image CDN
   },
 };
 
-module.exports = nextConfig;
-
+export default nextConfig;
