@@ -1,18 +1,28 @@
 import React from 'react'
 import Link from 'next/link';
-import { fetchCoffeeStore } from '@/lib/coffee-stores';
+import { fetchCoffeeStore, fetchCoffeeStores } from '@/lib/coffee-stores';
 import Image from 'next/image';
+import { CoffeeStoreType } from '@/types';
+
 
 async function getData(id: string) {
+  //google api call
   return await fetchCoffeeStore(id);
+}
+
+export async function generateStaticParams () {
+  const coffeeStores = await fetchCoffeeStores();
+
+  return coffeeStores.map((coffeeStore: CoffeeStoreType) => ({
+    id: coffeeStore.id, //Ensure that each object contains the id
+  }));
 }
 
 export default async function Page(props: { params: { id: string } }) {
   const { params: { id } } = props;
 
-  const coffeeStore = await getData(id);
+    const coffeeStore: CoffeeStoreType = await getData(id);
 
-  console.log({ coffeeStore });
 
   return (
     <div className="h-full pb-80">

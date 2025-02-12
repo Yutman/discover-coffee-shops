@@ -1,5 +1,3 @@
-// app/page.tsx
-
 import Banner from "@/components/banner.client";
 import Card from "@/components/card.server";
 import { fetchCoffeeStores } from "@/lib/coffee-stores";
