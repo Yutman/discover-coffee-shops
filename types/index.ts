@@ -5,10 +5,9 @@ export type CoffeeStoreType = {
     address: string;
 };
 
-export type MapboxType = {
+export type GooglePlacesType = {
     id: string;
-    properties: {
-        address: string;
-    };
-    text: string;
-}
+    name: string;
+    address: string;
+    imgUrl?: string;
+};
