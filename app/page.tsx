@@ -4,7 +4,8 @@ import { fetchCoffeeStores } from "@/lib/coffee-stores";
 import { CoffeeStoreType } from "@/types";
 
 async function getData() {
-  return await fetchCoffeeStores();
+  const TORONTO_LAT_LONG = '43.65107,-79.347015';
+  return await fetchCoffeeStores('43.65107,-79.347015');
 }
 
 export default async function Home() {

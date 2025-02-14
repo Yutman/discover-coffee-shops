@@ -10,10 +10,10 @@ const transformCoffeeData = (result: GooglePlacesType) => {
 }; //  This function takes an individual coffee shop's data (from the Google Places API) and reformats it into a standard structure. 
 // The goal is to make the data consistent, with the properties id, name, address, and imgUrl.
 
-export const fetchCoffeeStores = async () => {
+export const fetchCoffeeStores = async (longLat: string) => {
     try {
         const response = await fetch(
-            `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=43.6532,-79.3832&radius=5000&type=cafe&key=${process.env.GOOGLE_API_KEY}`
+            `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${longLat}&radius=50000&type=cafe&key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}`
         );
 
         if (!response.ok) {
@@ -32,7 +32,7 @@ export const fetchCoffeeStores = async () => {
                 id: result.place_id,
                 name: result.name,
                 address: result.vicinity,
-                imgUrl: result.photos ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${result.photos[0].photo_reference}&key=${process.env.GOOGLE_API_KEY}` : ''
+                imgUrl: result.photos ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${result.photos[0].photo_reference}&key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}` : ''
             })
         ); //  For each coffee shop in the results array, we call transformCoffeeData to ensure that the data is returned in the correct format, with an ID, name, address, and image URL.
     } catch (error) {
@@ -44,7 +44,7 @@ export const fetchCoffeeStores = async () => {
 export const fetchCoffeeStore = async (id: string) => {
     try {
         const response = await fetch(
-            `https://maps.googleapis.com/maps/api/place/details/json?placeid=${id}&key=${process.env.GOOGLE_API_KEY}`
+            `https://maps.googleapis.com/maps/api/place/details/json?placeid=${id}&key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}`
         );
         
         if (!response.ok) {
@@ -62,7 +62,7 @@ export const fetchCoffeeStore = async (id: string) => {
             id: data.result.place_id,
             name: data.result.name,
             address: data.result.vicinity,
-            imgUrl: data.result.photos ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${data.result.photos[0].photo_reference}&key=${process.env.GOOGLE_API_KEY}` : ''
+            imgUrl: data.result.photos ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${data.result.photos[0].photo_reference}&key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}` : ''
         });
     } catch (error) {
         console.error('Error while fetching coffee store:', error);
