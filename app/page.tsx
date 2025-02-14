@@ -1,5 +1,5 @@
 import Card from "@/components/card.server";
-import NearbyCoffeeStores from "@/components/nearby-coffee-stores";
+import NearbyCoffeeStores from "@/components/nearby-coffee-stores.client";
 import { fetchCoffeeStores } from "@/lib/coffee-stores";
 import { CoffeeStoreType } from "@/types";
 
