@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 const useTrackLocation = () => {
   const [isFindingLocation, setIsFindingLocation] = useState(false);
+  const [longLat, setLongLat] = useState('');
 
   const handleTrackLocation = () => {
     if (!navigator.geolocation) {
@@ -20,6 +21,8 @@ const useTrackLocation = () => {
         console.log(`Latitude: ${latitude} °, Longitude: ${longitude} °`);
         // Delay updating the state for 3 seconds (3000ms)
         setTimeout(() => {
+
+          setLongLat(`${longitude} °, ${latitude} °`);
           setIsFindingLocation(false);
         }, 3000);
       },
@@ -28,12 +31,13 @@ const useTrackLocation = () => {
         // Even on error, wait 3 seconds before resetting the state
         setTimeout(() => {
           setIsFindingLocation(false);
-        }, 1000);
+        }, 500);
       }
     );
   };
 
   return {
+    longLat,
     handleTrackLocation,
     isFindingLocation,
   };
