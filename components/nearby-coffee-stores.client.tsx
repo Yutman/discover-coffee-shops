@@ -6,7 +6,7 @@ import useTrackLocation from '@/hooks/use-track-location';
 
 export default function NearbyCoffeeStores() {
 
-    const {handleTrackLocation, isFindingLocation, longLat} = useTrackLocation(); //this hook will be used for mainly getting the location info and showing it to us
+    const {handleTrackLocation, isFindingLocation, longLat, locationErrorMsg} = useTrackLocation(); //this hook will be used for mainly getting the location info and showing it to us
 
     const handleOnClick = () => {
         handleTrackLocation(); 
@@ -17,7 +17,7 @@ export default function NearbyCoffeeStores() {
         <Banner handleOnClick={handleOnClick}
         buttonText={isFindingLocation ? 'Locating...' : 'View stores nearby'}
         />
-        Location: {longLat}
+        {locationErrorMsg && <p>Error: {locationErrorMsg}</p>}
   </div>
   );
 }
