@@ -12,19 +12,20 @@ const transformCoffeeData = (result: GooglePlacesType) => {
 
 export const fetchCoffeeStores = async (longLat: string) => {
     try {
-        const response = await fetch(
-            `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${longLat}&radius=50000&type=cafe&key=${process.env.GOOGLE_API_KEY}`
-        );
+        const googlePlacesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${longLat}&radius=50000&type=cafe&key=${process.env.GOOGLE_API_KEY}`;
 
+        // Log the URL properly
         console.log(`Fetching stores for location: ${longLat}`);
-         console.log(`API URL: ${response}`);
+        console.log(`API URL: ${googlePlacesUrl}`); // Log the actual URL
+
+        const response = await fetch(googlePlacesUrl);
 
         if (!response.ok) {
             throw new Error(`Failed to fetch coffee stores: ${response.statusText}`);
         }
 
         const data = await response.json();
-        
+
         if (!data.results || data.results.length === 0) {
             throw new Error('No coffee shops found');
         }
@@ -37,12 +38,13 @@ export const fetchCoffeeStores = async (longLat: string) => {
                 address: result.vicinity,
                 imgUrl: result.photos ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${result.photos[0].photo_reference}&key=${process.env.GOOGLE_API_KEY}` : ''
             })
-        ); //  For each coffee shop in the results array, we call transformCoffeeData to ensure that the data is returned in the correct format, with an ID, name, address, and image URL.
+        );
     } catch (error) {
         console.error('Error while fetching coffee stores:', error);
         return [];
     }
 };
+
 
 export const fetchCoffeeStore = async (id: string) => {
     try {
