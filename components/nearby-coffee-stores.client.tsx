@@ -43,11 +43,15 @@ export default function NearbyCoffeeStores() {
 
     return (
         <div>
-            <Banner handleOnClick={handleOnClick} buttonText={isFindingLocation ? 'Locating...' : 'View stores nearby'} />
+            <Banner 
+            handleOnClick={handleOnClick} 
+            buttonText={isFindingLocation ? 'Locating...' : 'View stores nearby'} 
+            />
             {locationErrorMsg && <p>Error: {locationErrorMsg}</p>}
             {isLoading && <p>Loading stores...</p>}
             {error && <p>{error}</p>}
 
+            {coffeeStores.length > 0 && (
             <div className="nt-20">
                 <h2 className="nt-8 pb-8 text-4xl font-bold text-white">Stores near me</h2>
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
@@ -65,6 +69,7 @@ export default function NearbyCoffeeStores() {
                     )}
                 </div>
             </div>
+            )}
         </div>
     );
 }
