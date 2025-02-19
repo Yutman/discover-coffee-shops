@@ -7,11 +7,15 @@ import { CoffeeStoreType } from '@/types';
 
 async function getData(id: string) {
   //google api call
-  return await fetchCoffeeStore(id);
+  const coffeeStore = await fetchCoffeeStore(id);
+  if (!coffeeStore) {
+    throw new Error(`Coffee store with id ${id} not found`);
+  }
+  return coffeeStore;
 }
 
 export async function generateStaticParams () {
-  const coffeeStores = await fetchCoffeeStores();
+  const coffeeStores = await fetchCoffeeStores('43.65107,-79.347015');
 
   return coffeeStores.map((coffeeStore: CoffeeStoreType) => ({
     id: coffeeStore.id, //Ensure that each object contains the id
