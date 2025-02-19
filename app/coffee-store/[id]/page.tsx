@@ -1,34 +1,45 @@
-import React from 'react'
+import React from 'react';
 import Link from 'next/link';
 import { fetchCoffeeStore, fetchCoffeeStores } from '@/lib/coffee-stores';
 import Image from 'next/image';
 import { CoffeeStoreType } from '@/types';
 
+async function getData(id: string): Promise<CoffeeStoreType | null> {
+  try {
+    // Fetch data from Google Places API
+    const coffeeStore = await fetchCoffeeStore(id);
 
-async function getData(id: string) {
-  //google api call
-  const coffeeStore = await fetchCoffeeStore(id);
-  if (!coffeeStore) {
-    throw new Error(`Coffee store with id ${id} not found`);
+    if (!coffeeStore || Object.keys(coffeeStore).length === 0) {
+      throw new Error(`Coffee store with id ${id} not found`);
+    }
+    return coffeeStore as CoffeeStoreType; // Ensure type safety
+  } catch (error) {
+    console.error('Error fetching coffee store:', error);
+    return null;
   }
-  return coffeeStore;
 }
 
-export async function generateStaticParams () {
+export async function generateStaticParams() {
   const coffeeStores = await fetchCoffeeStores('43.65107,-79.347015');
 
   return coffeeStores.map((coffeeStore: CoffeeStoreType) => ({
-    id: coffeeStore.id, //Ensure that each object contains the id
+    id: coffeeStore.id, // Ensure each object contains an `id`
   }));
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
-  // Await the data properly
   const { id } = params;
 
   // Fetch coffee store data
-  const coffeeStore: CoffeeStoreType = await getData(id);
+  const coffeeStore = await getData(id);
 
+  if (!coffeeStore) {
+    return (
+      <div className="h-full flex items-center justify-center">
+        <h2 className="text-2xl font-bold text-white">Coffee store not found</h2>
+      </div>
+    );
+  }
 
   return (
     <div className="h-full pb-80">
@@ -45,11 +56,11 @@ export default async function Page({ params }: { params: { id: string } }) {
             width={740}
             height={360}
             className="max-h-[420px] min-w-full max-w-full rounded-lg border-2 sepia lg:max-w-[470px]"
-            alt={'Coffee Store Image'}
+            alt="Coffee Store Image"
           />
         </div>
 
-        <div className={`glass mt-12 flex-col rounded-lg p-4 lg:mt-48`}>
+        <div className="glass mt-12 flex-col rounded-lg p-4 lg:mt-48">
           {coffeeStore.address && (
             <div className="mb-4 flex">
               <Image
