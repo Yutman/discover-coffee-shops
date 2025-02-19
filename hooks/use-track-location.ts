@@ -25,7 +25,7 @@ const useTrackLocation = () => {
         // Delay updating the state for 3 seconds (3000ms)
         setTimeout(() => {
 
-          setLongLat(`${longitude} °, ${latitude} °`);
+          setLongLat(`${latitude},${longitude}`);
           setIsFindingLocation(false);
           setLocationErrorMsg('');
         }, 500);
