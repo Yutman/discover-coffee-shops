@@ -21,11 +21,11 @@ const useTrackLocation = () => {
       (position) => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
-        console.log(`Latitude: ${latitude} °, Longitude: ${longitude} °`);
+        console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
         // Delay updating the state for 3 seconds (3000ms)
         setTimeout(() => {
 
-          setLongLat(`${latitude},${longitude}`);
+          setLongLat(`43.65107,-79.347015`);
           setIsFindingLocation(false);
           setLocationErrorMsg('');
         }, 500);

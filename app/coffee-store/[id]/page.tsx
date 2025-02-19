@@ -22,10 +22,12 @@ export async function generateStaticParams () {
   }));
 }
 
-export default async function Page(props: { params: { id: string } }) {
-  const { params: { id } } = props;
+export default async function Page({ params }: { params: { id: string } }) {
+  // Await the data properly
+  const { id } = params;
 
-    const coffeeStore: CoffeeStoreType = await getData(id);
+  // Fetch coffee store data
+  const coffeeStore: CoffeeStoreType = await getData(id);
 
 
   return (
