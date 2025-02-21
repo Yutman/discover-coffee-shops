@@ -4,39 +4,51 @@ import { fetchCoffeeStore, fetchCoffeeStores } from '@/lib/coffee-stores';
 import Image from 'next/image';
 import { CoffeeStoreType } from '@/types';
 
+// ✅ Fetch coffee store data
 async function getData(id: string): Promise<CoffeeStoreType | null> {
-  try {
-    // Fetch data from Google Places API
-    const coffeeStore = await fetchCoffeeStore(id);
-
-    if (!coffeeStore || Object.keys(coffeeStore).length === 0) {
-      throw new Error(`Coffee store with id ${id} not found`);
-    }
-    return coffeeStore as CoffeeStoreType; // Ensure type safety
-  } catch (error) {
-    console.error('Error fetching coffee store:', error);
+  if (!id) {
+    console.error('❌ Invalid ID:', id);
     return null;
   }
+
+  const coffeeStore = await fetchCoffeeStore(id);
+  
+  if (!coffeeStore || !coffeeStore.id) {
+    console.error(`❌ Coffee store not found for ID: ${id}`);
+    return null;
+  }
+
+  return coffeeStore;
 }
 
+// ✅ Generate static paths for dynamic routing
 export async function generateStaticParams() {
   const coffeeStores = await fetchCoffeeStores('43.65107,-79.347015');
 
-  return coffeeStores.map((coffeeStore: CoffeeStoreType) => ({
-    id: coffeeStore.id, // Ensure each object contains an `id`
-  }));
+  return coffeeStores
+    .filter((store) => store.id) // Ensure ID is present
+    .map((coffeeStore: CoffeeStoreType) => ({
+      id: coffeeStore.id.toString(), // Ensure ID is a string
+    }));
 }
 
+// ✅ The actual page component
 export default async function Page({ params }: { params: { id: string } }) {
-  const { id } = params;
+  console.log('✅ Params received:', params);
 
-  // Fetch coffee store data
-  const coffeeStore = await getData(id);
+  if (!params?.id) {
+    return <div className="text-red-500">Error: Missing parameters</div>;
+  }
+
+  const coffeeStore = await getData(params.id);
 
   if (!coffeeStore) {
     return (
-      <div className="h-full flex items-center justify-center">
-        <h2 className="text-2xl font-bold text-white">Coffee store not found</h2>
+      <div className="text-center text-red-500">
+        <h2 className="text-3xl font-bold mt-10">Coffee store not found</h2>
+        <Link href="/" className="mt-4 text-blue-500 underline">
+          Go back home
+        </Link>
       </div>
     );
   }
@@ -65,8 +77,8 @@ export default async function Page({ params }: { params: { id: string } }) {
             <div className="mb-4 flex">
               <Image
                 src="/static/icons/places.svg"
-                width="24"
-                height="24"
+                width={24}
+                height={24}
                 alt="places icon"
               />
               <p className="pl-2">{coffeeStore.address}</p>

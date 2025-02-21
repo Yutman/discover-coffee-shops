@@ -1,4 +1,5 @@
-import { GooglePlacesType } from '../types';
+import { CoffeeStoreType, GooglePlacesType } from '../types';
+
 
 const transformCoffeeData = (result: GooglePlacesType) => {
     return {
@@ -46,34 +47,41 @@ export const fetchCoffeeStores = async (longLat: string) => {
 };
 
 
-export const fetchCoffeeStore = async (id: string) => {
+export const fetchCoffeeStore = async (id: string): Promise<CoffeeStoreType | null> => {
     try {
+        if (!id) {
+            throw new Error('❌ Missing coffee store ID');
+        }
+
+        console.log(`🛠 Fetching details for coffee store ID: ${id}`);
+
         const response = await fetch(
             `https://maps.googleapis.com/maps/api/place/details/json?placeid=${id}&key=${process.env.GOOGLE_API_KEY}`
         );
-        
+
         if (!response.ok) {
-            throw new Error(`Failed to fetch coffee store: ${response.statusText}`);
+            throw new Error(`❌ Failed to fetch coffee store: ${response.statusText}`);
         }
 
         const data = await response.json();
 
         if (!data.result) {
-            throw new Error('No coffee store found');
+            console.error(`❌ No coffee store found for ID: ${id}`);
+            return null;
         }
 
-        // Transform the result
-        return transformCoffeeData({
+        return {
             id: data.result.place_id,
             name: data.result.name,
-            address: data.result.vicinity,
-            imgUrl: data.result.photos ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${data.result.photos[0].photo_reference}&key=${process.env.GOOGLE_API_KEY}` : ''
-        });
+            address: data.result.vicinity || 'No address available',
+            imgUrl: data.result.photos ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${data.result.photos[0].photo_reference}&key=${process.env.GOOGLE_API_KEY}` : '',
+        };
     } catch (error) {
-        console.error('Error while fetching coffee store:', error);
-        return {};
+        console.error('❌ Error fetching coffee store:', error);
+        return null;
     }
 };
+
 
 // This code is for fetching and displaying coffee shop data using the Google Places API. 
 // It is designed to fit into a coffee store app that shows a list of coffee shops, along with details like their name, address, and image. 
