@@ -4,43 +4,32 @@ import { fetchCoffeeStore, fetchCoffeeStores } from '@/lib/coffee-stores';
 import Image from 'next/image';
 import { CoffeeStoreType } from '@/types';
 
-// ✅ Fetch coffee store data
+// Fetch coffee store data
 async function getData(id: string): Promise<CoffeeStoreType | null> {
-  if (!id) {
-    console.error('❌ Invalid ID:', id);
-    return null;
-  }
-
   const coffeeStore = await fetchCoffeeStore(id);
-  
-  if (!coffeeStore || !coffeeStore.id) {
-    console.error(`❌ Coffee store not found for ID: ${id}`);
-    return null;
+
+  if (!coffeeStore || !coffeeStore.id || !coffeeStore.name) {
+    console.error(`Invalid coffee store data: ${JSON.stringify(coffeeStore)}`);
+    return null; 
   }
 
   return coffeeStore;
 }
 
-// ✅ Generate static paths for dynamic routing
+// Generate static parameters for dynamic routes
 export async function generateStaticParams() {
   const coffeeStores = await fetchCoffeeStores('43.65107,-79.347015');
 
-  return coffeeStores
-    .filter((store) => store.id) // Ensure ID is present
-    .map((coffeeStore: CoffeeStoreType) => ({
-      id: coffeeStore.id.toString(), // Ensure ID is a string
-    }));
+  return coffeeStores.map((coffeeStore: CoffeeStoreType) => ({
+    id: coffeeStore.id,
+  }));
 }
 
-// ✅ The actual page component
 export default async function Page({ params }: { params: { id: string } }) {
-  console.log('✅ Params received:', params);
+  const { id } = params;
 
-  if (!params?.id) {
-    return <div className="text-red-500">Error: Missing parameters</div>;
-  }
-
-  const coffeeStore = await getData(params.id);
+  // Fetch coffee store data
+  const coffeeStore: CoffeeStoreType | null = await getData(id);
 
   if (!coffeeStore) {
     return (
@@ -67,6 +56,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             src={coffeeStore.imgUrl || 'https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80'}
             width={740}
             height={360}
+             style={{ width: 'auto', height: 'auto' }}
             className="max-h-[420px] min-w-full max-w-full rounded-lg border-2 sepia lg:max-w-[470px]"
             alt="Coffee Store Image"
           />

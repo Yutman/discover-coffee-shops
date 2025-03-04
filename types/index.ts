@@ -6,8 +6,10 @@ export type CoffeeStoreType = {
 };
 
 export type GooglePlacesType = {
+    photos: boolean;
     id: string;
     name: string;
     address: string;
     imgUrl?: string;
 };
+
