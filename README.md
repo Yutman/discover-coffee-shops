@@ -181,19 +181,13 @@ The next/image component in Next.js provides a built-in feature to blur images, 
 
 Resource: PNG Pixel
 
-Mapbox API Setup
-API Token
-sk.eyJ1IjoibXVjaGlyaWt1cmlhIiwiYSI6ImNtNjluaXR5NjBlY2YyanNlemozdG1rbHMifQ.tpcO_eCYegRW7NehpHKP3Q
-
 generateStaticParams is a data fetching method that works with Static Site Generation (SSG) to pre-render dynamic routes at build time. It is used to generate the list of dynamic route parameters for a given dynamic route. These parameters define which pages will be statically generated when you build your Next.js project
 
 Fetch Call for receiving unique ID
 NB: The @ alias in Next.js maps to the src directory (or the root folder if not using src/).
 This is cleaner and easier to manage than relative imports like ../../FOLDER/File.
 
-
 generateStaticParams must return a promise (because it's async) and the params object inside your page should match the structure you're returning.
-
 
 Since the Google Places API now provides image URLs for each coffee shop through the photos property, you no longer need to rely on Unsplash for fetching images. 
 The Google Places API will give you the correct image for each coffee shop based on its photo_reference. This means the images are dynamic and specific to each shop which is an advantage over Mapbox Geocoding.
@@ -202,11 +196,6 @@ Geolocation API: it is used to retrieve the user's location, so that it can for 
 
 To use geolocation we need to use the navigator which is a browser API meaning we need to create a client component to handle it. The button 'View stores nearby' is also a click handler; that functionality needs to be in a client component. 
 
-Error Handling: 
-
-Airtables: 
-Airtable is a cloud-based database that combines the flexibility of a spreadsheet with the functionality of a relational database. Provides API access, custom views, collaboration features.
-It’s often used as a backend for applications where structured data is needed but a full-fledged database like PostgreSQL or MongoDB isn't required.
 
 
 
